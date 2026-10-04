@@ -3,35 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LumiDesk 🌈</title>
+    <title>LumiDesk</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="app-container">
-        <!-- Sidebar Navigation -->
         <nav class="sidebar">
-            <h1 class="logo">🌈 LumiDesk</h1>
+            <h1 class="logo">LumiDesk</h1>
             <ul>
-                <li class="active">⌂ Home</li>
-                <li>⏱ Focus</li>
-                <li>✅ Tasks</li>
-                <li>📝 Notes</li>
-                <li>📚 Subjects</li>
+                <li class="active">Home</li>
+                <li>Focus</li>
+                <li>Tasks</li>
+                <li>Notes</li>
+                <li>Subjects</li>
             </ul>
             <div class="bottom-nav">
-                <li id="theme-toggle">🎨 Theme</li>
-                <li>⚙ Settings</li>
+                <li id="theme-toggle">Theme</li>
+                <li>Settings</li>
             </div>
         </nav>
 
-        <!-- Main Workspace -->
         <main class="dashboard">
             <header>
-                <h2 id="greeting">☀️ Good afternoon, Dhritideep!</h2>
+                <h2 id="greeting">Good afternoon, Dhritideep!</h2>
             </header>
             
             <div class="grid-container">
-                <!-- Pomodoro Widget -->
                 <div class="card pomodoro-card">
                     <div class="timer-display" id="time">25:00</div>
                     <div class="plant-status" id="plant">🌱</div>
@@ -39,13 +36,23 @@
                     <button id="start-timer" class="btn">START</button>
                 </div>
 
-                <!-- Quick Tasks Placeholder -->
                 <div class="card tasks-card">
-                    <h3>✅ TODAY</h3>
-                    <ul class="task-list">
-                        <li><input type="checkbox"> Finish integration exercise</li>
-                        <li><input type="checkbox"> Physics notes</li>
+                    <h3>TODAY</h3>
+                    <div class="task-input-area">
+                        <input type="text" id="new-task" placeholder="Add a new task...">
+                        <button id="add-task-btn" class="btn-small">+</button>
+                    </div>
+                    <ul class="task-list" id="task-list">
                     </ul>
+                </div>
+
+                <div class="card notes-card">
+                    <h3>Quick Notes</h3>
+                    <div class="note-controls">
+                        <button id="add-note-btn" class="btn-small">+ New Note</button>
+                    </div>
+                    <div class="notes-grid" id="notes-grid">
+                    </div>
                 </div>
             </div>
         </main>
