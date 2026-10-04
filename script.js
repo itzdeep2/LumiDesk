@@ -1,5 +1,6 @@
 let db;
 let tasks = [];
+let notes = [];
 let timeLeft = 1500;
 let timerId = null;
 let isFocusing = false;
@@ -12,6 +13,8 @@ const themeToggle = document.getElementById('theme-toggle');
 const taskInput = document.getElementById('new-task');
 const addTaskBtn = document.getElementById('add-task-btn');
 const taskList = document.getElementById('task-list');
+const notesGrid = document.getElementById('notes-grid');
+const addNoteBtn = document.getElementById('add-note-btn');
 
 const request = indexedDB.open('LumiDeskDB', 1);
 
@@ -29,6 +32,7 @@ function saveData() {
     const transaction = db.transaction(['workspace'], 'readwrite');
     const store = transaction.objectStore('workspace');
     store.put({ id: 'tasks', data: tasks });
+    store.put({ id: 'notes', data: notes });
     store.put({ id: 'stats', data: { focusSessions: focusSessions } });
 }
 
@@ -41,6 +45,14 @@ function loadData() {
         if (getTasks.result) {
             tasks = getTasks.result.data;
             renderTasks();
+        }
+    };
+
+    const getNotes = store.get('notes');
+    getNotes.onsuccess = function() {
+        if (getNotes.result) {
+            notes = getNotes.result.data;
+            renderNotes();
         }
     };
 
@@ -103,10 +115,70 @@ function deleteTask(index) {
     renderTasks();
 }
 
+function renderNotes() {
+    notesGrid.innerHTML = '';
+    notes.forEach((note, index) => {
+        const div = document.createElement('div');
+        div.classList.add('note-item');
+        div.style.backgroundColor = note.color;
+
+        const textarea = document.createElement('textarea');
+        textarea.value = note.text;
+        textarea.addEventListener('input', function() {
+            notes[index].text = this.value;
+            saveData();
+        });
+
+        const footer = document.createElement('div');
+        footer.classList.add('note-footer');
+
+        const colorPicker = document.createElement('div');
+        colorPicker.classList.add('color-picker');
+
+        const colors = ['#ffb3c6', '#fff3b0', '#aed9e0', '#c8b6ff', '#a5d6a7'];
+        colors.forEach(colorHex => {
+            const dot = document.createElement('div');
+            dot.classList.add('color-dot');
+            dot.style.backgroundColor = colorHex;
+            dot.addEventListener('click', function() {
+                notes[index].color = colorHex;
+                saveData();
+                renderNotes();
+            });
+            colorPicker.appendChild(dot);
+        });
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.innerText = '×';
+        deleteBtn.classList.add('delete-btn');
+        deleteBtn.addEventListener('click', () => deleteNote(index));
+
+        footer.appendChild(colorPicker);
+        footer.appendChild(deleteBtn);
+
+        div.appendChild(textarea);
+        div.appendChild(footer);
+        notesGrid.appendChild(div);
+    });
+}
+
+function addNote() {
+    notes.unshift({ text: '', color: '#fff3b0' });
+    saveData();
+    renderNotes();
+}
+
+function deleteNote(index) {
+    notes.splice(index, 1);
+    saveData();
+    renderNotes();
+}
+
 addTaskBtn.addEventListener('click', addTask);
 taskInput.addEventListener('keypress', function(e) {
     if (e.key === 'Enter') addTask();
 });
+addNoteBtn.addEventListener('click', addNote);
 
 function updatePlant() {
     const progress = 1 - (timeLeft / 1500);
