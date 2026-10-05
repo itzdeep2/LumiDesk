@@ -15,6 +15,7 @@
                 <li>Focus</li>
                 <li>Tasks</li>
                 <li>Notes</li>
+                <li>Planner</li>
                 <li>Subjects</li>
             </ul>
             <div class="bottom-nav">
@@ -52,6 +53,47 @@
                         <button id="add-note-btn" class="btn-small">+ New Note</button>
                     </div>
                     <div class="notes-grid" id="notes-grid">
+                    </div>
+                </div>
+
+                <div class="card planner-card">
+                    <h3>Study Planner</h3>
+                    <div class="planner-palette" id="planner-palette">
+                        <div class="study-block" draggable="true" data-subject="Maths" style="background:#ffb3c6">Maths</div>
+                        <div class="study-block" draggable="true" data-subject="Physics" style="background:#aed9e0">Physics</div>
+                        <div class="study-block" draggable="true" data-subject="Chemistry" style="background:#c8b6ff">Chemistry</div>
+                        <div class="study-block" draggable="true" data-subject="English" style="background:#fff3b0">English</div>
+                        <div class="study-block" draggable="true" data-subject="CS" style="background:#a5d6a7">CS</div>
+                    </div>
+                    <div class="planner-grid">
+                        <div class="day-col" data-day="MON">
+                            <h4>MON</h4>
+                            <div class="drop-zone"></div>
+                        </div>
+                        <div class="day-col" data-day="TUE">
+                            <h4>TUE</h4>
+                            <div class="drop-zone"></div>
+                        </div>
+                        <div class="day-col" data-day="WED">
+                            <h4>WED</h4>
+                            <div class="drop-zone"></div>
+                        </div>
+                        <div class="day-col" data-day="THU">
+                            <h4>THU</h4>
+                            <div class="drop-zone"></div>
+                        </div>
+                        <div class="day-col" data-day="FRI">
+                            <h4>FRI</h4>
+                            <div class="drop-zone"></div>
+                        </div>
+                        <div class="day-col" data-day="SAT">
+                            <h4>SAT</h4>
+                            <div class="drop-zone"></div>
+                        </div>
+                        <div class="day-col" data-day="SUN">
+                            <h4>SUN</h4>
+                            <div class="drop-zone"></div>
+                        </div>
                     </div>
                 </div>
             </div>
