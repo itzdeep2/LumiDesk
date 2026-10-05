@@ -1,10 +1,13 @@
 let db;
 let tasks = [];
 let notes = [];
+let planner = { MON: [], TUE: [], WED: [], THU: [], FRI: [], SAT: [], SUN: [] };
 let timeLeft = 1500;
 let timerId = null;
 let isFocusing = false;
 let focusSessions = 0;
+let draggedSubject = null;
+let draggedColor = null;
 
 const timeDisplay = document.getElementById('time');
 const startBtn = document.getElementById('start-timer');
@@ -15,6 +18,8 @@ const addTaskBtn = document.getElementById('add-task-btn');
 const taskList = document.getElementById('task-list');
 const notesGrid = document.getElementById('notes-grid');
 const addNoteBtn = document.getElementById('add-note-btn');
+const studyBlocks = document.querySelectorAll('.study-block');
+const dropZones = document.querySelectorAll('.drop-zone');
 
 const request = indexedDB.open('LumiDeskDB', 1);
 
@@ -33,6 +38,7 @@ function saveData() {
     const store = transaction.objectStore('workspace');
     store.put({ id: 'tasks', data: tasks });
     store.put({ id: 'notes', data: notes });
+    store.put({ id: 'planner', data: planner });
     store.put({ id: 'stats', data: { focusSessions: focusSessions } });
 }
 
@@ -53,6 +59,14 @@ function loadData() {
         if (getNotes.result) {
             notes = getNotes.result.data;
             renderNotes();
+        }
+    };
+
+    const getPlanner = store.get('planner');
+    getPlanner.onsuccess = function() {
+        if (getPlanner.result) {
+            planner = getPlanner.result.data;
+            renderPlanner();
         }
     };
 
@@ -173,6 +187,79 @@ function deleteNote(index) {
     saveData();
     renderNotes();
 }
+
+function renderPlanner() {
+    document.querySelectorAll('.day-col').forEach(col => {
+        const day = col.getAttribute('data-day');
+        const dropZone = col.querySelector('.drop-zone');
+        dropZone.innerHTML = '';
+        
+        planner[day].forEach((item, index) => {
+            const block = document.createElement('div');
+            block.classList.add('scheduled-block');
+            block.style.backgroundColor = item.color;
+            
+            const textSpan = document.createElement('span');
+            textSpan.innerText = item.subject;
+            
+            const delBtn = document.createElement('span');
+            delBtn.innerText = '×';
+            delBtn.style.cursor = 'pointer';
+            delBtn.addEventListener('click', () => {
+                planner[day].splice(index, 1);
+                saveData();
+                renderPlanner();
+            });
+            
+            block.appendChild(textSpan);
+            block.appendChild(delBtn);
+            dropZone.appendChild(block);
+        });
+    });
+}
+
+studyBlocks.forEach(block => {
+    block.addEventListener('dragstart', (e) => {
+        draggedSubject = e.target.getAttribute('data-subject');
+        draggedColor = e.target.style.backgroundColor;
+        e.target.style.opacity = '0.5';
+    });
+    
+    block.addEventListener('dragend', (e) => {
+        e.target.style.opacity = '1';
+        draggedSubject = null;
+        draggedColor = null;
+    });
+});
+
+dropZones.forEach(zone => {
+    zone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        zone.classList.add('drag-over');
+    });
+    
+    zone.addEventListener('dragleave', () => {
+        zone.classList.remove('drag-over');
+    });
+    
+    zone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        zone.classList.remove('drag-over');
+        
+        if (draggedSubject) {
+            const dayCol = zone.closest('.day-col');
+            const day = dayCol.getAttribute('data-day');
+            
+            planner[day].push({
+                subject: draggedSubject,
+                color: draggedColor
+            });
+            
+            saveData();
+            renderPlanner();
+        }
+    });
+});
 
 addTaskBtn.addEventListener('click', addTask);
 taskInput.addEventListener('keypress', function(e) {
