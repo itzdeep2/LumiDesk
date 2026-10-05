@@ -16,7 +16,7 @@
                 <li>Tasks</li>
                 <li>Notes</li>
                 <li>Planner</li>
-                <li>Subjects</li>
+                <li>Progress</li>
             </ul>
             <div class="bottom-nav">
                 <li id="theme-toggle">Theme</li>
@@ -45,6 +45,36 @@
                     </div>
                     <ul class="task-list" id="task-list">
                     </ul>
+                </div>
+
+                <div class="card subjects-card">
+                    <h3>Subject Progress</h3>
+                    <div class="subjects-list" id="subjects-list">
+                    </div>
+                </div>
+
+                <div class="card stats-card">
+                    <h3>This Week</h3>
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <span class="stat-value" id="stat-focus">0h 0m</span>
+                            <span class="stat-label">Focus Time</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-value" id="stat-sessions">0</span>
+                            <span class="stat-label">Sessions</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-value" id="stat-tasks">0</span>
+                            <span class="stat-label">Tasks Done</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-value" id="stat-streak">0 🔥</span>
+                            <span class="stat-label">Day Streak</span>
+                        </div>
+                    </div>
+                    <div class="bar-chart" id="bar-chart">
+                    </div>
                 </div>
 
                 <div class="card notes-card">
